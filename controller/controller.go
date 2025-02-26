@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/taneja-garvit/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -48,7 +49,7 @@ func init() {
 
 // insert 1 record
 
-func insertOneMovie(movie model.Netflix) { // we took model.netflix bec here we takes the name of the packeage instead of file
+func insertOneMovie(movie model.Netflix){ // we took model.netflix bec here we takes the name of the packeage instead of file
 	inserted, err := collection.InsertOne(context.Background(), movie)
 	if err != nil {
 		log.Fatal(err)
@@ -91,17 +92,6 @@ func deleteMany() int64 {
 
 // get all movies from database
 
-package controller
-
-import (
-	"context"
-	"fmt"
-	"log"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-)
-
 // GetAllMovies retrieves all movie records from MongoDB
 func getAllMovies() []primitive.M {
 	// Find all documents in the collection
@@ -136,3 +126,11 @@ func getAllMovies() []primitive.M {
 	return movies
 }
 
+
+// Actual export controllers 
+
+func GetAllMovies(w http.ResponseWriter, r *http.Request){
+		w.Header().Set("Content-Type", "application/x-www-form-urlencode")
+		allMovies := getAllMovies()
+		json.NewEncoder(w).Encode(allMovies)
+}
